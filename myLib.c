@@ -6,9 +6,6 @@ unsigned short *videoBuffer = (unsigned short *)0x6000000;
 // The start of DMA registers
 DMA *dma = (DMA *)0x40000B0;
 
-// The shadowOAM
-OBJ_ATTR shadowOAM[128];
-
 // Set a pixel on the screen in Mode 3
 void setPixel3(int col, int row, unsigned short color) {
     videoBuffer[OFFSET(col, row, SCREENWIDTH)] = color;
@@ -105,8 +102,8 @@ void drawFullscreenImage4(const unsigned short *image) {
 
 // Pause code execution until vertical blank begins
 void waitForVBlank() {
-    while(SCANLINECOUNTER > 160);
-    while(SCANLINECOUNTER < 160);
+	while(SCANLINECOUNTER > 160);
+	while(SCANLINECOUNTER < 160);
 }
 
 // Flips the page
@@ -140,8 +137,11 @@ int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, i
         && colA < colB + widthB - 1 && colA + widthA - 1 > colB;
 }
 
+// Hides all sprites in the shadowOAM
 void hideSprites() {
+    
     for (int i = 0; i < 128; i++) {
         shadowOAM[i].attr0 = ATTR0_HIDE;
     }
 }
+
